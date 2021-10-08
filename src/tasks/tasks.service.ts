@@ -4,7 +4,6 @@ import { TaskStatus } from './tasks.model';
 import { TaskRepository } from './task.repository';
 import { CreatetaskDto } from 'src/dto/create-task-dto';
 import { Task } from './tasks.entity';
-import { UpdateTaskDto } from 'src/dto/update.task.dto';
 import { GetTasksFilterDto } from 'src/dto/create.filter.dto';
 import { getManager, getRepository } from 'typeorm';
 import { User } from 'src/auth/user.entity';
