@@ -3,7 +3,6 @@ import {
   IsString,
   Matches,
   MaxLength,
-  minLength,
   MinLength,
 } from 'class-validator';
 

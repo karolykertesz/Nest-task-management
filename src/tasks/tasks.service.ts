@@ -7,16 +7,18 @@ import { Task } from './tasks.entity';
 import { UpdateTaskDto } from 'src/dto/update.task.dto';
 import { GetTasksFilterDto } from 'src/dto/create.filter.dto';
 import { getManager, getRepository } from 'typeorm';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TasksService {
   constructor(private readonly taskRepository: TaskRepository) {}
-  async createTasks(createTaskDto: CreatetaskDto): Promise<Task> {
+  async createTasks(createTaskDto: CreatetaskDto, user: User): Promise<Task> {
     const { title, description } = createTaskDto;
     const task = this.taskRepository.create({
       title,
       description,
       status: TaskStatus.OPEN,
+      user,
     });
     await this.taskRepository.save(task);
     return task;

@@ -8,9 +8,18 @@ import {
 import { CreateUserDto } from './dtos/create.user-dto';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+
+export interface JwtPayload {
+  username: string;
+}
+
 @Injectable()
 export class AuthService {
-  constructor(private readonly authRepo: UserRepository) {}
+  constructor(
+    private readonly authRepo: UserRepository,
+    private readonly jwtService: JwtService,
+  ) {}
   async createUser(createUser: CreateUserDto): Promise<void> {
     const { username, password } = createUser;
     const salt = await bcrypt.genSalt();
@@ -27,12 +36,14 @@ export class AuthService {
       }
     }
   }
-  async signIn(User: CreateUserDto): Promise<string> {
+  async signIn(User: CreateUserDto): Promise<{ token: string }> {
     const { username, password } = User;
     const user = await this.authRepo.findOne({ username });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      return 'hh';
+      const payload: JwtPayload = { username };
+      const token: string = await this.jwtService.sign(payload);
+      return { token };
     } else {
       throw new UnauthorizedException('Wrong user credentials');
     }
